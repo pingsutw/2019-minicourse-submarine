@@ -1,0 +1,48 @@
+version: '3.3'
+services:
+
+    postgres:                                           # create postgres container
+        image: postgres:9.6
+        container_name: postgres_container
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+
+    airflow:                                            # create airflow container
+        build: './airflow'                       # construct the container along the Dockerfile in this folder
+        container_name: airflow_container
+        restart: always
+        depends_on:
+            - postgres
+        environment:
+            - LOAD_EX=n
+            - EXECUTOR=Local
+        volumes:                                     # mount the following local folders
+            - ./dags:/usr/local/airflow/dags
+            - ./data:/usr/local/airflow/data
+            - ./models:/usr/local/airflow/models
+        ports:
+            - "8080:8080"                               # expose port
+        command: webserver
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3
+
+    mlflow:                                             # create a MLFlow container
+        build: './mlflow'                        # construct the container along the Dockerfile in this folder
+        container_name: mlflow_container
+        ports:
+            - "5000:5000"                               # expose port
+        command: 'mlflow server --backend-store-uri ./mlflow --host 0.0.0.0 --port 5000'
+
+    jupyter:                                             # create a jupyter container
+        image: jupyter/datascience-notebook:latest
+        container_name: jupyter_container
+        volumes:
+            - .:/home/jovyan/work
+        ports:
+            - "7000:8888"                               # expose port
+        command: 'start-notebook.sh --NotebookApp.token=""'
