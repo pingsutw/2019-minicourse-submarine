@@ -1,6 +1,7 @@
 import keras
 from keras.models import Sequential, load_model
-import mlflow.keras
+import mlflow
+import mlflow.xgboost
 import numpy as np
 import logging
 import pandas as pd
@@ -31,8 +32,8 @@ def model_validation(**kwargs):
     output_csv(kwargs['path_model_predict_dir'], predict, test_ID)
 
     logging.info('Save model')
-    path = os.path.join(kwargs['path_model_save_dir'], 'xgboost_model.pth')
-    xgboost.save_model(path)
+    path = os.path.join(kwargs['path_model_save_dir'], 'xgboost')
+    mlflow.xgboost.log_model(xgboost, 'model')
 
     path = os.path.join(kwargs['path_model_save_dir'], 'lightgbm_model.pth')
     lightgbm.booster_.save_model(path)

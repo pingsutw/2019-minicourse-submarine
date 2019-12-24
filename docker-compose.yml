@@ -34,6 +34,8 @@ services:
     mlflow:                                             # create a MLFlow container
         build: './mlflow'                        # construct the container along the Dockerfile in this folder
         container_name: mlflow_container
+        depends_on:
+            - postgres
         ports:
             - "5000:5000"                               # expose port
         command: 'mlflow server --backend-store-uri ./mlflow --host 0.0.0.0 --port 5000'
