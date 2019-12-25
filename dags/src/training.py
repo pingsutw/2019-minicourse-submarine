@@ -50,7 +50,6 @@ def run_xgboost(**kwargs):
     xgb_train_pred = model_xgb.predict(train)
     score = rmse(label, xgb_train_pred)
     mlflow.log_metric("rmse", score)
-    mlflow.sklearn.log_model(model_xgb, "models")
     logging.info("score : ", score)
     return [model_xgb, score]
 

@@ -23,6 +23,8 @@ def model_validation(**kwargs):
     xgboost, score1 = ti.xcom_pull(task_ids='xgboost')
     lightgbm, score2 = ti.xcom_pull(task_ids='lightgbm')
     _, _, test, test_ID = ti.xcom_pull(task_ids='preprocessing')
+    logging.info('xgboost score: ', score1)
+    logging.info('lightgbm score: ', score2)
 
     # Find the best model and predict test result
     if score1 > score2:
@@ -30,10 +32,4 @@ def model_validation(**kwargs):
     else:
         predict = np.expm1(lightgbm.predict(test))
     output_csv(kwargs['path_model_predict_dir'], predict, test_ID)
-
-    logging.info('Save model')
-    path = os.path.join(kwargs['path_model_save_dir'], 'xgboost')
-    mlflow.xgboost.log_model(xgboost, 'model')
-
-    path = os.path.join(kwargs['path_model_save_dir'], 'lightgbm_model.pth')
-    lightgbm.booster_.save_model(path)
+    return [xgboost, lightgbm]

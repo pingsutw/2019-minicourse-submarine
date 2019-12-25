@@ -8,6 +8,7 @@ from airflow.operators.papermill_operator import PapermillOperator
 from src.preprocessing import preprocessing
 from src.training import run_xgboost, run_lightgbm
 from src.model_validation import model_validation
+from src.pusher import save_model_local
 
 PATH_SAVE_MODEL_DIR = "./models"
 PATH_SAVE_PREDICT_DIR = "./data"
@@ -56,10 +57,17 @@ lightgbm = PythonOperator(
 model_validation = PythonOperator(
     task_id='model_validation',
     python_callable=model_validation,
-    op_kwargs={'path_model_save_dir': PATH_SAVE_MODEL_DIR,
-               'path_model_predict_dir': PATH_SAVE_PREDICT_DIR},
+    op_kwargs={'path_model_predict_dir': PATH_SAVE_PREDICT_DIR},
     dag=dag
 )
+
+# pusher = PythonOperator(
+#     task_id='save_model_local',
+#     python_callable=save_model_local,
+#     op_kwargs={'path_model_save_dir': PATH_SAVE_MODEL_DIR},
+#     dag=dag
+# )
+# model_validation >> pusher
 
 keggle_summit = BashOperator(
     task_id='keggle_summit',
@@ -71,14 +79,6 @@ keggle_summit = BashOperator(
 data_ingestion >> preprocessing >> xgboost >> model_validation >> keggle_summit
 preprocessing >> lightgbm >> model_validation
 preprocessing >> model_validation
-
-# run_this = PapermillOperator(
-#     task_id="preprocessing",
-#     input_nb="./data_visualization.ipynb",
-#     output_nb="/tmp/out-{{ execution_date }}.ipynb",
-#     parameters={"msgs": "Ran from Airflow at {{ execution_date }}!"},
-#     dag=dag
-# )
 
 if __name__ == "__main__":
     dag.cli()
