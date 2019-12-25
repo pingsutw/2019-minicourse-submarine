@@ -58,6 +58,9 @@ sudo apt install docker-compose # install docker-compose
 sudo apt-get install docker.io # install docker
 service docker status
 ```
+
+### Install Docker Desktop on Mac
+[docker doc](https://docs.docker.com/docker-for-mac/install/)
 ### Join Kaggle Competition
 [House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques)
 
