@@ -25,8 +25,8 @@ Goals of Submarine:
 
 ### Install mini-submarine
 ```shell=
-git clone https://github.com/pingsutw/2019-minicourse-submarine.git
-cd 2019-minicourse-submarine
+git clone https://github.com/apache/submarine.git
+cd submarine
 git submodule update --init --recursive
 mvn clean install package -DskipTests
 cd dev-support/mini-submarine 
