@@ -48,11 +48,12 @@ xgboost = PythonOperator(
     dag=dag
 )
 
-lightgbm = PythonOperator(
-    task_id='lightgbm',
-    python_callable=run_lightgbm,
-    dag=dag
-)
+# lightgbm = PythonOperator(
+#     task_id='lightgbm',
+#     python_callable=run_lightgbm,
+#     dag=dag
+# )
+# preprocessing >> lightgbm >> model_validation
 
 model_validation = PythonOperator(
     task_id='model_validation',
@@ -77,7 +78,6 @@ keggle_summit = BashOperator(
 
 # build DAG
 data_ingestion >> preprocessing >> xgboost >> model_validation >> keggle_summit
-preprocessing >> lightgbm >> model_validation
 preprocessing >> model_validation
 
 if __name__ == "__main__":
