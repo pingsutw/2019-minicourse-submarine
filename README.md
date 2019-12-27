@@ -1,7 +1,7 @@
 # 2019-minicourse-submarine
 DESIGN AND IMPLEMENTATION OF A MACHINE LEARNING PLATFORM
 
-2019-minicourse-submarine [slide](https://docs.google.com/presentation/d/1KdOmE7ErS5SAeTr_YURkSXUwUPlNzA7RJchDUiN7F2U/edit#slide=id.g7be442d290_0_109), [doc](https://hackmd.io/@pingsutw/H11HN5Z1U)
+2019-minicourse-submarine [slide](https://docs.google.com/presentation/d/1KdOmE7ErS5SAeTr_YURkSXUwUPlNzA7RJchDUiN7F2U/edit?usp=sharing), [doc](https://hackmd.io/@pingsutw/H11HN5Z1U)
 
 ![](https://raw.githubusercontent.com/apache/hadoop-submarine/master/docs/assets/color_logo_with_text.png)
 
