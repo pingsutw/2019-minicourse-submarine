@@ -1,6 +1,8 @@
 # 2019-minicourse-submarine
 DESIGN AND IMPLEMENTATION OF A MACHINE LEARNING PLATFORM
 
+2019-minicourse-submarine [slide](https://docs.google.com/presentation/d/1KdOmE7ErS5SAeTr_YURkSXUwUPlNzA7RJchDUiN7F2U/edit#slide=id.g7be442d290_0_109), [doc](https://hackmd.io/@pingsutw/H11HN5Z1U)
+
 ![](https://raw.githubusercontent.com/apache/hadoop-submarine/master/docs/assets/color_logo_with_text.png)
 
 ### What is Apache Submarine?
@@ -15,6 +17,34 @@ Goals of Submarine:
 - Support specify GPU and other resources.
 - Support launch TensorBoard for training jobs if user specified.
 - Support customized DNS name for roles (like TensorBoard.$user.$domain:6006)
+
+### Prerequisites
+- Maven 3.3 or later ( 3.6.2 is known to fail, see SUBMARINE-273 )
+- JDK 1.8
+
+
+### Install mini-submarine
+```shell=
+git clone https://github.com/pingsutw/2019-minicourse-submarine.git
+cd 2019-minicourse-submarine
+git submodule update --init --recursive
+mvn clean install package -DskipTests
+cd dev-support/mini-submarine 
+./build_mini-submarine.sh
+```
+
+### Run mini-submarine
+```shell=
+docker run -it -h submarine-dev --net=bridge --privileged -P local/mini-submarine:0.3.0-SNAPSHOT /bin/bash
+
+# In the container, use root user to bootstrap hdfs and yarn
+/tmp/hadoop-config/bootstrap.sh
+
+su yarn
+# Run distributed training on hadoop
+cd && cd submarine && ./run_submarine_mnist_tony.sh
+```
+
 
 ### ML code in a real-world ML system is a lot smaller than the infrastructure 
 ![](https://miro.medium.com/max/840/1*NB4nRkgULkiCkl10lSOhlg.png)
