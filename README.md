@@ -33,6 +33,11 @@ cd dev-support/mini-submarine
 ./build_mini-submarine.sh
 ```
 
+### Pull from dockerhub without maven and java
+```shell=
+docker pull hadoopsubmarine/mini-submarine:0.3.0-SNAPSHOT 
+```
+
 ### Run mini-submarine
 ```shell=
 docker run -it -h submarine-dev --net=bridge --privileged -P local/mini-submarine:0.3.0-SNAPSHOT /bin/bash
