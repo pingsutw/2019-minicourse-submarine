@@ -4,7 +4,7 @@ import airflow
 from airflow.models import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.operators.papermill_operator import PapermillOperator
+# from airflow.operators.papermill_operator import PapermillOperator
 from src.preprocessing import preprocessing
 from src.training import run_xgboost, run_lightgbm
 from src.model_validation import model_validation
@@ -48,11 +48,11 @@ xgboost = PythonOperator(
     dag=dag
 )
 
-# lightgbm = PythonOperator(
-#     task_id='lightgbm',
-#     python_callable=run_lightgbm,
-#     dag=dag
-# )
+lightgbm = PythonOperator(
+    task_id='lightgbm',
+    python_callable=run_lightgbm,
+    dag=dag
+)
 # preprocessing >> lightgbm >> model_validation
 
 model_validation = PythonOperator(
@@ -62,13 +62,13 @@ model_validation = PythonOperator(
     dag=dag
 )
 
-# pusher = PythonOperator(
-#     task_id='save_model_local',
-#     python_callable=save_model_local,
-#     op_kwargs={'path_model_save_dir': PATH_SAVE_MODEL_DIR},
-#     dag=dag
-# )
-# model_validation >> pusher
+pusher = PythonOperator(
+    task_id='save_model_local',
+    python_callable=save_model_local,
+    op_kwargs={'path_model_save_dir': PATH_SAVE_MODEL_DIR},
+    dag=dag
+)
+model_validation >> pusher
 
 keggle_summit = BashOperator(
     task_id='keggle_summit',
@@ -77,7 +77,8 @@ keggle_summit = BashOperator(
 )
 
 # build DAG
-data_ingestion >> preprocessing >> xgboost >> model_validation >> keggle_summit
+
+data_ingestion >> preprocessing >> [xgboost,lightgbm ] >> model_validation >> keggle_summit
 preprocessing >> model_validation
 
 if __name__ == "__main__":
