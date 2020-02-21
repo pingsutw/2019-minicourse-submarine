@@ -1,6 +1,5 @@
 version: '3.3'
 services:
-
     postgres:                                           # create postgres container
         image: postgres:9.6
         container_name: postgres_container
@@ -37,7 +36,11 @@ services:
         depends_on:
             - postgres
         ports:
-            - "5000:5000"                               # expose port
+            - "5000:5000"
+            - "5051:5051"                               # expose port
+            - "5052:5052" 
+        volumes:
+            - ./models:/root/models
         command: 'mlflow server --backend-store-uri ./mlflow --host 0.0.0.0 --port 5000'
 
     jupyter:                                             # create a jupyter container
