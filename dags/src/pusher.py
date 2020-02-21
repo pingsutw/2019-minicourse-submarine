@@ -18,4 +18,4 @@ def save_model_local(**kwargs):
     mlflow.xgboost.save_model(xgboost, path)
 
     path = os.path.join(kwargs['path_model_save_dir'], 'lightgbm')
-    mlflow.lightgbm.save_model(lightgbm, path)
+    mlflow.lightgbm.save_model(lightgbm.booster_, path)
