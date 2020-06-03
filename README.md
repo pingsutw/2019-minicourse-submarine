@@ -27,7 +27,6 @@ Goals of Submarine:
 ```shell=
 git clone https://github.com/apache/submarine.git
 cd submarine
-git submodule update --init --recursive
 mvn clean install package -DskipTests
 cd dev-support/mini-submarine 
 ./build_mini-submarine.sh
